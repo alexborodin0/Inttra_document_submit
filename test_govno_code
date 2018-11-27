@@ -1,0 +1,71 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoAlertPresentException
+from time import sleep
+
+bkg  = input("Введи номер букинга -  ")
+driver = webdriver.Chrome('C:\Python\Scripts123\chromedriver.exe')
+driver.get("https://usatrt.com/app/Admin/bookingList.aspx")
+driver.find_element_by_id("Login1_txtName").send_keys("sergeymbl")
+driver.find_element_by_id("Login1_txtPassword").send_keys("1543356Bb@0390")
+driver.find_element_by_id("Login1_btnLogin").click()
+sleep(1)
+driver.find_element_by_link_text("Transactions").click()
+driver.find_element_by_link_text("Transportation").click()
+sleep(1)
+driver.find_element_by_id("ctl00_BodyHolder_txtBookingNumber").click()
+driver.find_element_by_id("ctl00_BodyHolder_txtBookingNumber").clear()
+driver.find_element_by_id("ctl00_BodyHolder_txtBookingNumber").send_keys(bkg)
+driver.find_element_by_id("ctl00_BodyHolder_cmdFilter").click()
+sleep(1)
+driver.find_element_by_id("ctl00_BodyHolder_myGridView_ctl03_hlTransaction").click()
+window_before = driver.window_handles[0]
+driver.find_element_by_id("ctl00_BodyHolder_cmdMBLEdit").click()
+window_after = driver.window_handles[1]
+driver.switch_to_window(window_after)
+driver.find_element_by_xpath("//*[@id='cmdEmailPreview']").click()
+content = driver.find_element_by_xpath("//*[@id='divMailBody']/div[3]/table[3]/tbody/tr[2]/td[1]").text
+CTR = content.split()[2]
+ttlvght = driver.find_element_by_xpath("//*[@id='divMailBody']/div[3]/table[3]/tbody/tr[1]/td[2]/table/tbody/tr[6]/td[2]").text
+driver.switch_to_window(window_before)
+driver.get('https://login.inttra.com')
+sleep(2)
+u = driver.find_element_by_id("email")
+u.send_keys("trtinternational")
+p = driver.find_element_by_id("password")
+p.send_keys("196maracaibo")
+login = driver.find_element_by_xpath("/html/body/app-root/div/div/div/div/app-login/div/div[1]/form/button")
+login.click()
+sleep(5)
+driver.find_element_by_xpath("//*[@id='shipLabel']").click()
+sleep(1)
+driver.find_element_by_xpath("//*[@id='dashboard-ship']/ul/li[13]/a").click()
+sleep(2)
+shiper = input("Введи Шипера  ")
+panel = driver.find_element_by_xpath("//*[@id='pane1']")
+panel.click()
+Select(driver.find_element_by_id("carrierId")).select_by_visible_text(shiper)
+driver.find_element_by_id("carrierId").click()
+driver.find_element_by_xpath("//*[@id='responsibleName']").send_keys("TRT INTERNATIONAL LTD")
+driver.find_element_by_id("vgmReference_0").click()
+driver.find_element_by_id("vgmReference_0").clear()
+driver.find_element_by_id("vgmReference_0").send_keys(bkg)
+driver.find_element_by_id("containerType_0").click()
+Select(driver.find_element_by_id("containerType_0")).select_by_visible_text("40 High Cube (45G0)")
+driver.find_element_by_id("containerType_0").click()
+driver.find_element_by_id("number_0").click()
+driver.find_element_by_id("number_0").clear()
+driver.find_element_by_id("number_0").send_keys(CTR)
+driver.find_element_by_id("weight_0").click()
+driver.find_element_by_id("weight_0").clear()
+driver.find_element_by_id("weight_0").send_keys(ttlvght)
+driver.find_element_by_name("signature").click()
+driver.find_element_by_name("signature").clear()
+driver.find_element_by_name("signature").send_keys("KOGAN")
+driver.find_element_by_id("partnerNotifications").click()
+driver.find_element_by_id("partnerNotifications").clear()
+driver.find_element_by_id("partnerNotifications").send_keys("MBL@USATRT.COM")
+#driver.find_element_by_xpath("//*[@id='submitEvgmButBot']").click()
